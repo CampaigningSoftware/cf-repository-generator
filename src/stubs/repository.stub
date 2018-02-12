@@ -1,0 +1,74 @@
+<?php
+
+namespace %namespaces.repositories%;
+
+use Contentful\Delivery\DynamicEntry;
+use Contentful\Delivery\Query;
+use ContentfulDelivery;
+use Illuminate\Support\Collection;
+use %namespaces.factories%\%modelName%Factory;
+use %namespaces.models%\%modelName%;
+use %namespaces.contracts%\%modelName%Repository;
+
+class Contentful%modelName%Repository implements %modelName%Repository
+{
+    /**
+     * @return Collection
+     */
+    public function all()
+    {
+        $models = new Collection();
+        $pageCount = 0;
+        $modelCount = 0;
+
+        // paginated loading of all items from the api
+        do {
+            $resourceArray = $this->loadPageFromApi($pageCount);
+            $modelCount += count($resourceArray);
+
+            /** @var DynamicEntry $entry */
+            foreach ($resourceArray as $entry) {
+                try {
+                    $models->push($this->buildModelFromEntry($entry));
+                } catch (\Exception $e) {
+                    // if a single entry fails, log error and continue with the other entries
+                    \Log::error($e->getMessage());
+                    \Log::error($e->getTraceAsString());
+                }
+            }
+            $pageCount++;
+        } while ($resourceArray->getTotal() > $modelCount);
+
+        return $models;
+    }
+
+    /**
+     * load the next page
+     *
+     * @param int $pageCount
+     *
+     * @return \Contentful\ResourceArray
+     */
+    private function loadPageFromApi($pageCount)
+    {
+        $query = new Query();
+        $query->where('content_type', '%apiModelName%')
+              ->orderBy('-sys.createdAt')
+              ->setLimit(config('contentful.page_size', 100))
+              ->setSkip(config('contentful.page_size', 100) * $pageCount);
+
+        return ContentfulDelivery::getEntries($query);
+    }
+
+    /**
+     * build a model from the retrieved entry and return it
+     *
+     * @param DynamicEntry $entry
+     *
+     * @return %modelName%
+     */
+    private function buildModelFromEntry(DynamicEntry $entry): %modelName%
+    {
+        return %modelName%Factory::build($entry);
+    }
+}

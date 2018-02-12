@@ -1,0 +1,43 @@
+<?php
+
+namespace %namespaces.caching-repositories%;
+
+use Illuminate\Contracts\Cache\Repository as Cache;
+use Illuminate\Support\Collection;
+use %namespaces.contracts%\%modelName%Repository;
+
+class Caching%modelName%Repository implements %modelName%Repository
+{
+    /**
+     * @var %modelName%Repository
+     */
+    private $repository;
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
+     * Caching%modelName%Repository constructor.
+     *
+     * @param %modelName%Repository $repository
+     * @param Cache             $cache
+     */
+    public function __construct(%modelName%Repository $repository, Cache $cache)
+    {
+        $this->repository = $repository;
+        $this->cache = $cache;
+    }
+
+
+    /**
+     * @return Collection
+     */
+    public function all()
+    {
+        return $this->cache->remember('%cacheKey%.all', 1440, function ()
+        {
+            return $this->repository->all();
+        });
+    }
+}

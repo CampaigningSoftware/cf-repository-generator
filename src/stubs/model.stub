@@ -1,0 +1,94 @@
+<?php
+
+namespace %namespaces.models%;
+
+use Contentful\Delivery\Asset;
+use Contentful\File\ImageOptions;
+
+class %modelName%
+{
+    /**
+     * @var string
+     */
+    private $id;
+    /**
+     * @var string
+     */
+    private $title;
+    /**
+     * @var Asset|null
+     */
+    private $image;
+
+    /**
+     * Partner constructor.
+     *
+     * @param string      $id
+     * @param string      $title
+     * @param Asset|null  $image
+     */
+    public function __construct(string $id, string $title, $image)
+    {
+        $this->id = $id;
+        $this->title = $title;
+        $this->image = $image;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return Asset|null
+     */
+    public function getImage(): Asset
+    {
+        return $this->image;
+    }
+
+    /**
+     * get the image url with the given width, height and resizeFit as specified in the contentful image options
+     *
+     * @param int|null    $width
+     * @param int|null    $height
+     * @param string|null $resizeFit
+     *
+     * @return string
+     */
+    public function getImageUrl($width = 150, $height = 100, $resizeFit = 'fill'): string
+    {
+        if ($this->image === null) {
+            return '';
+        }
+
+        $options = new ImageOptions();
+        $options->setWidth($width)
+                ->setHeight($height)
+                ->setResizeFit($resizeFit);
+
+        $url = $this->image->getFile()
+                           ->getUrl($options);
+
+        return staticImage($url);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasImage(): bool
+    {
+        return $this->image !== null;
+    }
+}

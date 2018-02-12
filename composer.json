@@ -1,0 +1,26 @@
+{
+    "name": "campaigningbureau/cf-repository-generator",
+    "description": "Generates required repositories, factories and models to access a new Contentful Content Type in Laravel",
+    "keywords": [
+        "laravel",
+        "repository",
+        "contentful"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.0",
+        "illuminate/support": "5.5.*",
+        "mscharl/laravel-static-image-cache": "^1.2"
+    },
+    "authors": [
+        {
+            "name": "Stefan Schindler",
+            "email": "stefan.schindler@campaigning-bureau.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CampaigningBureau\\CfRepositoryGenerator\\": "src"
+        }
+    }
+}

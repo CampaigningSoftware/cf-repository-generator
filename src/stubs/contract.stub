@@ -1,0 +1,13 @@
+<?php
+
+namespace %namespaces.contracts%;
+
+use Illuminate\Support\Collection;
+
+interface %modelName%Repository
+{
+    /**
+     * @return Collection
+     */
+    public function all();
+}
