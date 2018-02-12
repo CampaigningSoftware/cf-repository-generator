@@ -28,10 +28,12 @@ class BaseCfRepositoryCommand extends Command
         'factories'            => 'Factories/',
     ];
 
-    public function __construct()
+    /**
+     * this method needs to be called at first the handle() method of the child class, as we dont want them in the
+     * constructor
+     */
+    public function handle()
     {
-        parent::__construct();
-
         $this->fileManager = app('files');
         $this->appNamespace = app()->getNamespace();
     }

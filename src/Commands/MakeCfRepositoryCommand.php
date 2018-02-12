@@ -43,6 +43,8 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
      */
     public function handle()
     {
+        parent::handle();
+
         $this->modelName = $this->argument('model');
 
         $this->createContract();
