@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stefanschindler
- * Date: 06.02.18
- * Time: 16:50
- */
 
-namespace StefanSchindler\CfRepositoryGenerator;
+namespace CampaigningBureau\CfRepositoryGenerator;
 
 use MScharl\LaravelStaticImageCache\Provider\LaravelStaticImageCacheProvider;
-use StefanSchindler\CfRepositoryGenerator\Commands\MakeCfRepositoryCommand;
+use CampaigningBureau\CfRepositoryGenerator\Commands\MakeCfRepositoryCommand;
 use Illuminate\Support\ServiceProvider;
 
 class CfRepositoryGeneratorServiceProvider extends ServiceProvider

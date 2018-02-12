@@ -1,6 +1,6 @@
 <?php
 
-namespace StefanSchindler\CfRepositoryGenerator\Commands;
+namespace CampaigningBureau\CfRepositoryGenerator\Commands;
 
 use Illuminate\Console\Command;
 
