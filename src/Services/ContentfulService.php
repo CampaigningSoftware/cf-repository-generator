@@ -103,16 +103,83 @@ class ContentfulService
      * return the model getter list (required for the factory) as string.
      * returns all getters separated by comma.
      *
-     * @param Collection $fields
+     * @param Collection $contentfulFields
      *
      * @return string
      */
-    public function getModelGetterList($fields)
+    public function getModelGetterList($contentfulFields)
     {
-        return $fields->map(function (ContentfulTypeFieldDecorator $type)
+        return $contentfulFields->map(function (ContentfulTypeFieldDecorator $type)
         {
             return '$entry->' . $type->getGetterName();
         })
-                      ->implode(', ');
+                                ->implode(', ');
+    }
+
+    /**
+     * get the argument list for the constructor.
+     *
+     * @param Collection $contentfulFields
+     *
+     * @return mixed
+     */
+    public function getConstructorArgumentList($contentfulFields)
+    {
+        return $contentfulFields->map(function (ContentfulTypeFieldDecorator $type)
+        {
+            // if the field is set to required in contentful, we know, data will exist, and typehinting is allowed
+            if ($type->isRequired()) {
+                return $type->getType() . ' ' . $type->getVariableName();
+            }
+
+            return $type->getVariableName();
+        })
+                                ->implode(', ');
+    }
+
+    /**
+     * return the constructor initialization lines
+     *
+     * @param Collection $contentfulFields
+     *
+     * @return string
+     */
+    public function getConstructorInitialization($contentfulFields)
+    {
+        return $contentfulFields->reduce(function ($carry, ContentfulTypeFieldDecorator $type)
+        {
+            return $carry . '$this->' . $type->getVariableName(true) . ' = ' . $type->getVariableName() . ';' . PHP_EOL;
+        });
+    }
+
+    /**
+     * get the doc block for the constructor arguments
+     *
+     * @param Collection $contentfulFields
+     *
+     * @return string
+     */
+    public function getConstructorArgumentDoc($contentfulFields)
+    {
+        return $contentfulFields->reduce(function ($carry, ContentfulTypeFieldDecorator $type)
+        {
+            return $carry . PHP_EOL . '* @param ' . $type->getType(true) . ' ' . $type->getVariableName();
+        });
+    }
+
+    /**
+     * get the instance variables block
+     *
+     * @param Collection $contentfulFields
+     *
+     * @return string
+     */
+    public function getInstanceVariables($contentfulFields)
+    {
+        return $contentfulFields->reduce(function ($carry, ContentfulTypeFieldDecorator $type)
+        {
+            return $carry . PHP_EOL . '/**' . PHP_EOL . '* @var ' . $type->getType(true) . PHP_EOL . '*/' . PHP_EOL .
+                   'private ' . $type->getVariableName() . ';' . PHP_EOL;
+        });
     }
 }

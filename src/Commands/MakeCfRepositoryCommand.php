@@ -74,7 +74,7 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
 
         $this->createFactory();
 
-        // $this->createModel();
+        $this->createModel();
 
         // $this->createCachingRepository();
 
@@ -191,8 +191,12 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
         $content = $this->fileManager->get($this->stubs['model']);
 
         $replacements = [
-            '%modelName%'         => $this->modelName,
-            '%namespaces.models%' => $this->calculateNamespaceFromPath($this->config('paths.models')),
+            '%modelName%'                 => $this->modelName,
+            '%namespaces.models%'         => $this->calculateNamespaceFromPath($this->config('paths.models')),
+            '%instanceVariables%'         => $this->contentful->getInstanceVariables($this->contentfulFields),
+            '%constructorArgumentList%'   => $this->contentful->getConstructorArgumentList($this->contentfulFields),
+            '%constructorArgumentDoc%'    => $this->contentful->getConstructorArgumentDoc($this->contentfulFields),
+            '%constructorInitialization%' => $this->contentful->getConstructorInitialization($this->contentfulFields),
         ];
 
         $content = str_replace(array_keys($replacements), array_values($replacements), $content);
