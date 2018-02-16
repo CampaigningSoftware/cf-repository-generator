@@ -9,6 +9,6 @@ class %modelName%Factory
 {
     public static function build(DynamicEntry $entry): %modelName%
     {
-        return new %modelName%($entry->getId(), $entry->getTitle(), $entry->getImage());
+        return new %modelName%(%modelGetterList%);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace CampaigningBureau\CfRepositoryGenerator\Commands;
 
+use CampaigningBureau\CfRepositoryGenerator\Services\ContentfulService;
 use Illuminate\Console\Command;
 
 class BaseCfRepositoryCommand extends Command
@@ -12,6 +13,11 @@ class BaseCfRepositoryCommand extends Command
      * @var Illuminate\Filesystem\Filesystem
      */
     protected $fileManager;
+
+    /**
+     * @var ContentfulService
+     */
+    protected $contentful;
 
     /**
      * Application namespace
@@ -32,10 +38,11 @@ class BaseCfRepositoryCommand extends Command
      * this method needs to be called at first the handle() method of the child class, as we dont want them in the
      * constructor
      */
-    public function handle()
+    public function handle(ContentfulService $contentful)
     {
         $this->fileManager = app('files');
         $this->appNamespace = app()->getNamespace();
+        $this->contentful = $contentful;
     }
 
     /**

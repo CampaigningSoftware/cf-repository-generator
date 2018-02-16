@@ -2,7 +2,9 @@
 
 namespace CampaigningBureau\CfRepositoryGenerator\Commands;
 
-use Illuminate\Console\Command;
+use CampaigningBureau\CfRepositoryGenerator\Services\ContentfulService;
+use Contentful\Delivery\ContentType;
+use Illuminate\Support\Collection;
 
 class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
 {
@@ -11,14 +13,14 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
      *
      * @var string
      */
-    protected $signature = 'make:cf-repository {model} {--apiModelName= : defines the content model name in the cf api. if this is not specified, the lowercased model is used}';
+    protected $signature = 'make:cf-repository';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create contract, repositories, factory and model';
+    protected $description = 'Create contract, repositories, factory and model for a contentful content type';
     /**
      * paths to the stubs
      *
@@ -35,27 +37,46 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
      * @var string
      */
     private $modelName;
+    /**
+     * @var string
+     */
+    private $contentTypeName;
+    /**
+     * @var string
+     */
+    private $contentTypeId;
+
+    /**
+     * @var Collection
+     */
+    private $contentfulFields;
 
     /**
      * Execute the console command.
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(ContentfulService $contentful)
     {
-        parent::handle();
+        parent::handle($contentful);
 
-        $this->modelName = $this->argument('model');
+        // select content type
+        $this->selectContentType();
 
-        $this->createContract();
+        // let the user choose a model name
+        $this->selectModelName();
 
-        $this->createContentfulRepository();
+        $this->contentfulFields = $this->contentful->getFieldsForId($this->contentTypeId);
+
+        // $this->createContract();
+
+        // $this->createContentfulRepository();
 
         $this->createFactory();
 
-        $this->createModel();
+        // $this->createModel();
 
-        $this->createCachingRepository();
+        // $this->createCachingRepository();
 
         $this->info('+++');
         $this->info('Creation completed. To use the repository, add the following lines to the register() method of your app service provider:');
@@ -133,7 +154,7 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
             '%namespaces.factories%'    => $this->calculateNamespaceFromPath($this->config('paths.factories')),
             '%namespaces.models%'       => $this->calculateNamespaceFromPath($this->config('paths.models')),
             '%namespaces.contracts%'    => $this->calculateNamespaceFromPath($this->config('paths.contracts')),
-            '%apiModelName%'            => $this->option('apiModelName') ? $this->option('apiModelName') : snake_case($this->modelName),
+            '%apiModelName%'            => $this->contentTypeId,
         ];
 
         $content = str_replace(array_keys($replacements), array_values($replacements), $content);
@@ -153,6 +174,7 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
             '%modelName%'            => $this->modelName,
             '%namespaces.factories%' => $this->calculateNamespaceFromPath($this->config('paths.factories')),
             '%namespaces.models%'    => $this->calculateNamespaceFromPath($this->config('paths.models')),
+            '%modelGetterList%'      => $this->contentful->getModelGetterList($this->contentfulFields),
         ];
 
         $content = str_replace(array_keys($replacements), array_values($replacements), $content);
@@ -203,5 +225,55 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
         $filePath = $fileDirectory . $fileName . '.php';
 
         $this->putFileToHdd($fileDirectory, $filePath, $fileName, $content, 'caching repository');
+    }
+
+    /**
+     * let the user select the content type from contentful
+     *
+     * @return string
+     */
+    private function selectContentType()
+    {
+        $contentTypes = $this->contentful->getAvailableContentTypes();
+
+        // if no content types are found, a dummy content type may be created
+        if ($contentTypes->count() === 0) {
+            $this->manuallyDefineContentType();
+
+            return;
+        }
+
+        $this->contentTypeName = $this->choice('The following content types were found in the configured contentful space. Please select a content type for the generation: ',
+            $contentTypes->map(function (ContentType $contentType)
+            {
+                return $contentType->getName();
+            })
+                         ->toArray());
+
+        // after selection, get the id for this content type name
+        $this->contentTypeId = $this->contentful->getIdByName($this->contentTypeName);
+    }
+
+    /**
+     * let the user specify a model name
+     */
+    private function selectModelName()
+    {
+        $this->modelName = $this->ask('Please specify a model name. This value will be used for naming the created classes.',
+            studly_case($this->contentTypeName));
+
+        // convert the model name to studly case. removes blanks and ensures the first letter is uppercased
+        $this->modelName = studly_case($this->modelName);
+    }
+
+    /**
+     * if no content types were loaded from contentful, the user can manually define a content type name.
+     * the content type id is generated of the selected name.
+     */
+    private function manuallyDefineContentType()
+    {
+        $this->contentTypeName = $this->ask('No content types could be loaded from the configured contentful space. A stubbed version will be created. Please enter a name');
+
+        $this->contentTypeId = camel_case($this->contentTypeName);
     }
 }
