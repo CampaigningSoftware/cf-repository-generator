@@ -1,0 +1,34 @@
+    /**
+     * get the %rawVariableName% url with the given width, height and resizeFit as specified in the contentful image options.
+     * used in teaser and person details
+     *
+     * @param int|null    $width
+     * @param int|null    $height
+     * @param string|null $resizeFit
+     *
+     * @return string
+     */
+    public function %urlGetterName%($width = 300, $height = 300, $resizeFit = 'fill'): string
+    {
+        if (%variableName% === null) {
+            return '';
+        }
+
+        $options = new ImageOptions();
+        $options->setWidth($width)
+                ->setHeight($height)
+                ->setResizeFit($resizeFit);
+
+        $url = %variableName%->getFile()
+                           ->getUrl($options);
+
+        return staticImage($url);
+    }
+
+    /**
+     * @return bool
+     */
+    public function %checkerName%: bool
+    {
+        return %variableName% !== null;
+    }

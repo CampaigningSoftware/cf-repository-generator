@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stefanschindler
- * Date: 15.02.18
- * Time: 17:01
- */
 
 namespace CampaigningBureau\CfRepositoryGenerator\Services;
 
@@ -14,6 +8,7 @@ use Contentful\Delivery\Client;
 use Contentful\Delivery\ContentType;
 use Contentful\Delivery\ContentTypeField;
 use Contentful\ResourceArray;
+use Illuminate\Filesystem\Cache;
 use Illuminate\Support\Collection;
 
 class ContentfulService
@@ -31,7 +26,8 @@ class ContentfulService
 
     public function __construct()
     {
-        $this->client = new Client('6511adaf0dd5a05148b56387e1779055c594301d03e458442a101dac845d8576', 'r7zhbomppch0');
+        $this->client = new Client(config('cf-repository-generator.contentful_delivery_token'),
+            config('cf-repository-generator.contentful_delivery_space'));
     }
 
     /**
@@ -180,6 +176,21 @@ class ContentfulService
         {
             return $carry . PHP_EOL . '/**' . PHP_EOL . '* @var ' . $type->getType(true) . PHP_EOL . '*/' . PHP_EOL .
                    'private ' . $type->getVariableName() . ';' . PHP_EOL;
+        });
+    }
+
+    /**
+     * get the method list for all fields
+     *
+     * @param Collection $contentfulFields
+     *
+     * @return mixed
+     */
+    public function getMethodList($contentfulFields)
+    {
+        return $contentfulFields->reduce(function ($carry, ContentfulTypeFieldDecorator $contentfulField)
+        {
+            return $carry . PHP_EOL . $contentfulField->getMethods();
         });
     }
 }

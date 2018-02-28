@@ -13,4 +13,13 @@ return [
         'models'               => 'Models/',
         'factories'            => 'Factories/',
     ],
+
+    /**
+     * the id for the contentful space that needs to be accessed
+     */
+    'contentful_delivery_space' => env('CONTENTFUL_DELIVERY_SPACE', ''),
+    /**
+     * an api key for accessing the delivery space
+     */
+    'contentful_delivery_token' => env('CONTENTFUL_DELIVERY_TOKEN', ''),
 ];

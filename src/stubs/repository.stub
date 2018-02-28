@@ -4,7 +4,7 @@ namespace %namespaces.repositories%;
 
 use Contentful\Delivery\DynamicEntry;
 use Contentful\Delivery\Query;
-use ContentfulDelivery;
+use Contentful\Laravel\Facades\ContentfulDelivery;
 use Illuminate\Support\Collection;
 use %namespaces.factories%\%modelName%Factory;
 use %namespaces.models%\%modelName%;

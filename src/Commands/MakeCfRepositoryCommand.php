@@ -68,15 +68,15 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
 
         $this->contentfulFields = $this->contentful->getFieldsForId($this->contentTypeId);
 
-        // $this->createContract();
+        $this->createContract();
 
-        // $this->createContentfulRepository();
+        $this->createContentfulRepository();
 
         $this->createFactory();
 
         $this->createModel();
 
-        // $this->createCachingRepository();
+        $this->createCachingRepository();
 
         $this->info('+++');
         $this->info('Creation completed. To use the repository, add the following lines to the register() method of your app service provider:');
@@ -102,43 +102,8 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
             '%modelName%'            => $this->modelName,
         ];
 
-        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
-
-        $fileName = $this->modelName . 'Repository';
-        $fileDirectory = app()->basePath() . '/app/' . $this->config('paths.contracts');
-        $filePath = $fileDirectory . $fileName . '.php';
-
-        $this->putFileToHdd($fileDirectory, $filePath, $fileName, $content, 'contract');
-    }
-
-    /**
-     * save the given content to the hdd.
-     * if the file does already exist, print a confirmation message to overwrite it.
-     *
-     * @param string $fileDirectory
-     * @param string $filePath
-     * @param string $fileName
-     * @param string $content
-     * @param string $type
-     */
-    protected function putFileToHdd($fileDirectory, $filePath, $fileName, $content, $type)
-    {
-        // Check if the directory exists, if not create...
-        if (!$this->fileManager->exists($fileDirectory)) {
-            $this->fileManager->makeDirectory($fileDirectory, 0755, true);
-        }
-
-        if ($this->fileManager->exists($filePath)) {
-            if (!$this->confirm("The $type [{$fileName}] already exists. Do you want to overwrite it?")) {
-                $this->line("The $type [{$fileName}] will not be overwritten.");
-
-                return;
-            }
-        }
-
-        $this->line("The $type [{$fileName}] has been created.");
-
-        $this->fileManager->put($filePath, $content);
+        $this->replacePlaceholdersAndPersistFile($replacements, $content, $this->config('paths.contracts'),
+            $this->modelName . 'Repository', 'contract');
     }
 
     /**
@@ -157,13 +122,8 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
             '%apiModelName%'            => $this->contentTypeId,
         ];
 
-        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
-
-        $fileName = 'Contentful' . $this->modelName . 'Repository';
-        $fileDirectory = app()->basePath() . '/app/' . $this->config('paths.repositories');
-        $filePath = $fileDirectory . $fileName . '.php';
-
-        $this->putFileToHdd($fileDirectory, $filePath, $fileName, $content, 'repository');
+        $this->replacePlaceholdersAndPersistFile($replacements, $content, $this->config('paths.repositories'),
+            'Contentful' . $this->modelName . 'Repository', 'repository');
     }
 
     private function createFactory()
@@ -177,13 +137,8 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
             '%modelGetterList%'      => $this->contentful->getModelGetterList($this->contentfulFields),
         ];
 
-        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
-
-        $fileName = $this->modelName . 'Factory';
-        $fileDirectory = app()->basePath() . '/app/' . $this->config('paths.factories');
-        $filePath = $fileDirectory . $fileName . '.php';
-
-        $this->putFileToHdd($fileDirectory, $filePath, $fileName, $content, 'factory');
+        $this->replacePlaceholdersAndPersistFile($replacements, $content, $this->config('paths.factories'),
+            $this->modelName . 'Factory', 'factory');
     }
 
     private function createModel()
@@ -197,15 +152,11 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
             '%constructorArgumentList%'   => $this->contentful->getConstructorArgumentList($this->contentfulFields),
             '%constructorArgumentDoc%'    => $this->contentful->getConstructorArgumentDoc($this->contentfulFields),
             '%constructorInitialization%' => $this->contentful->getConstructorInitialization($this->contentfulFields),
+            '%methodList%'                => $this->contentful->getMethodList($this->contentfulFields),
         ];
 
-        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
-
-        $fileName = $this->modelName;
-        $fileDirectory = app()->basePath() . '/app/' . $this->config('paths.models');
-        $filePath = $fileDirectory . $fileName . '.php';
-
-        $this->putFileToHdd($fileDirectory, $filePath, $fileName, $content, 'model');
+        $this->replacePlaceholdersAndPersistFile($replacements, $content, $this->config('paths.models'),
+            $this->modelName, 'model');
     }
 
     private function createCachingRepository()
@@ -222,13 +173,8 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
             '%cacheKey%'                        => snake_case(str_plural($this->modelName)),
         ];
 
-        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
-
-        $fileName = 'Caching' . $this->modelName . 'Repository';
-        $fileDirectory = app()->basePath() . '/app/' . $this->config('paths.caching-repositories');
-        $filePath = $fileDirectory . $fileName . '.php';
-
-        $this->putFileToHdd($fileDirectory, $filePath, $fileName, $content, 'caching repository');
+        $this->replacePlaceholdersAndPersistFile($replacements, $content, $this->config('paths.caching-repositories'),
+            'Caching' . $this->modelName . 'Repository', 'caching repository');
     }
 
     /**
@@ -279,5 +225,51 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
         $this->contentTypeName = $this->ask('No content types could be loaded from the configured contentful space. A stubbed version will be created. Please enter a name');
 
         $this->contentTypeId = camel_case($this->contentTypeName);
+    }
+
+    /**
+     * perform replacement or all relevant placeholders and save the generated file to the hdd
+     *
+     * @param array  $replacements
+     * @param string $content
+     */
+    private function replacePlaceholdersAndPersistFile($replacements, $content, $relativePath, $fileName, $type)
+    {
+        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
+
+        $fileDirectory = app()->basePath() . '/app/' . $relativePath;
+        $filePath = $fileDirectory . $fileName . '.php';
+
+        $this->putFileToHdd($fileDirectory, $filePath, $fileName, $content, $type);
+    }
+
+    /**
+     * save the given content to the hdd.
+     * if the file does already exist, print a confirmation message to overwrite it.
+     *
+     * @param string $fileDirectory
+     * @param string $filePath
+     * @param string $fileName
+     * @param string $content
+     * @param string $type
+     */
+    protected function putFileToHdd($fileDirectory, $filePath, $fileName, $content, $type)
+    {
+        // Check if the directory exists, if not create...
+        if (!$this->fileManager->exists($fileDirectory)) {
+            $this->fileManager->makeDirectory($fileDirectory, 0755, true);
+        }
+
+        if ($this->fileManager->exists($filePath)) {
+            if (!$this->confirm("The $type [{$fileName}] already exists. Do you want to overwrite it?")) {
+                $this->line("The $type [{$fileName}] will not be overwritten.");
+
+                return;
+            }
+        }
+
+        $this->line("The $type [{$fileName}] has been created.");
+
+        $this->fileManager->put($filePath, $content);
     }
 }

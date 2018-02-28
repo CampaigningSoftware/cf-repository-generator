@@ -2,7 +2,7 @@
 
 Laravel 5.5 Contentful Repository generator.
 
-Generates contract, contentful repository, model, factory and caching repository.
+Generates contract, contentful repository, model, factory and caching repository with fields that are defined in the Contentful model.
 
 If one of these files does already exist, it can be kept or overwritten.
 
@@ -33,9 +33,9 @@ $ php artisan vendor:publish --provider="CampaigningBureau\CfRepositoryGenerator
 
 ### Step 4: Create repositories
 
-`php artisan make:cf-repository {model} {--apiModelName=}`
+`php artisan make:cf-repository`
 
-The `apiModelname` specifies the name of the content type in contentful. If this name is not set, the lowercased model name is used.
+This command will load all content types that are defined in the configured contentful space and provide an easy way to generate the relevant classes. 
 
 
 ## Configuration
@@ -46,8 +46,6 @@ To be conform to PSR-4 autoloading, the namespaces of the files are generated ou
 These are the default paths, that will be used, if the config file isn't published, or if the config keys don't exist: 
 
 ```php
-<?php
-
 return [
     'paths' => [
         'contracts'    => 'Repositories/Contracts/',

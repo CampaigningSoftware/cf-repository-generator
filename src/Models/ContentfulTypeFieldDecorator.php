@@ -1,22 +1,30 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stefanschindler
- * Date: 16.02.18
- * Time: 11:51
- */
 
 namespace CampaigningBureau\CfRepositoryGenerator\Models;
 
 
 use Contentful\Delivery\ContentTypeField;
 
+/**
+ * Class ContentfulTypeFieldDecorator
+ *
+ * decorate a contentful type field with additional functionality
+ *
+ * @package CampaigningBureau\CfRepositoryGenerator\Models
+ */
 class ContentfulTypeFieldDecorator
 {
     /**
      * @var ContentTypeField
      */
     protected $contentTypeField;
+
+    /**
+     * File manager.
+     *
+     * @var Illuminate\Filesystem\Filesystem
+     */
+    private $fileManager;
 
     /**
      * ContentfulTypeFieldDecorator constructor.
@@ -26,6 +34,7 @@ class ContentfulTypeFieldDecorator
     public function __construct(ContentTypeField $contentfulTypeField)
     {
         $this->contentTypeField = $contentfulTypeField;
+        $this->fileManager = app('files');
     }
 
     /**
@@ -39,7 +48,7 @@ class ContentfulTypeFieldDecorator
     }
 
     /**
-     * get the getter name for the field.
+     * get the getter function name for the field.
      *
      * will be prepended with get
      *
@@ -48,6 +57,28 @@ class ContentfulTypeFieldDecorator
     public function getGetterName()
     {
         return 'get' . studly_case($this->contentTypeField->getId()) . '()';
+    }
+
+    /**
+     * get the checker function name for the field.
+     *
+     * will be prepended with has
+     *
+     * @return string
+     */
+    public function getCheckerName()
+    {
+        return 'has' . studly_case($this->contentTypeField->getId()) . '()';
+    }
+
+    /**
+     * get the function name for the url getter
+     *
+     * @return string
+     */
+    public function getUrlGetterName()
+    {
+        return 'get' . studly_case($this->contentTypeField->getId()) . 'Url';
     }
 
     /**
@@ -107,7 +138,7 @@ class ContentfulTypeFieldDecorator
             case 'Number':
                 return 'double';
             case 'Boolean':
-                return 'boolean';
+                return 'bool';
             case 'Link':
                 return $this->getLinkDataType($contentfulLinkType);
             case 'Date':
@@ -137,6 +168,46 @@ class ContentfulTypeFieldDecorator
                 return '<tbd>';
             default:
                 return '<invalid>';
+        }
+    }
+
+    /**
+     * get the getter method(s) for the current field.
+     * all fields return a getter.
+     * image fields additionally return cached url and a boolean checker.
+     * @return string
+     */
+    public function getMethods()
+    {
+        // load template
+        $getterTemplate = $this->fileManager->get(__DIR__ . '/../stubs/methods/getter.stub');
+
+        $replacements = [
+            '%type%'         => $this->getType(true),
+            '%methodName%'   => $this->getGetterName(),
+            '%variableName%' => '$this->' . $this->getVariableName(true),
+        ];
+
+        $getterTemplate = str_replace(array_keys($replacements), array_values($replacements), $getterTemplate);
+
+        // with no linked type, just return the getter
+        if ($this->contentTypeField->getLinkType() === null) {
+            return $getterTemplate;
+        } else if ($this->contentTypeField->getLinkType() === 'Asset') {
+            // load template
+            $assetGetterTemplate = $this->fileManager->get(__DIR__ . '/../stubs/methods/asset-methods.stub');
+
+            $replacements = [
+                '%urlGetterName%'   => $this->getUrlGetterName(),
+                '%checkerName%'     => $this->getCheckerName(),
+                '%variableName%'    => '$this->' . $this->getVariableName(true),
+                '%rawVariableName%' => $this->getVariableName(true),
+            ];
+
+            $getterTemplate .= PHP_EOL . str_replace(array_keys($replacements), array_values($replacements),
+                    $assetGetterTemplate);
+
+            return $getterTemplate;
         }
     }
 }
