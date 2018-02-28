@@ -2,7 +2,7 @@
 
 Laravel 5.5 Contentful Repository generator.
 
-Generates contract, contentful repository, model, factory and caching repository with fields that are defined in the Contentful model.
+Generates contract, contentful repository, model, factory and caching repository with fields that are defined in the Contentful model. (https://www.contentful.com/)
 
 If one of these files does already exist, it can be kept or overwritten.
 
@@ -56,3 +56,6 @@ return [
     ],
 ];
 ```
+
+The `contentful_delivery_space` and `contentful_delivery_token` fields need to be set with the API Key and Space ID retrieved from Contentful.  
+By default they are set with the .env variables `CONTENTFUL_DELIVERY_SPACE` and `CONTENTFUL_DELIVERY_TOKEN`.
