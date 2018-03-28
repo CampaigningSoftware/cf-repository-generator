@@ -3,9 +3,9 @@
 namespace CampaigningBureau\CfRepositoryGenerator;
 
 use CampaigningBureau\CfRepositoryGenerator\Commands\MakeCfRepositoryCommand;
+use CampaigningBureau\LaravelStaticImageCache\Provider\LaravelStaticImageCacheProvider;
 use Contentful\Laravel\ContentfulServiceProvider;
 use Illuminate\Support\ServiceProvider;
-use MScharl\LaravelStaticImageCache\Provider\LaravelStaticImageCacheProvider;
 
 class CfRepositoryGeneratorServiceProvider extends ServiceProvider
 {

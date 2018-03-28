@@ -10,8 +10,8 @@
     "require": {
         "php": ">=7.0",
         "illuminate/support": "5.5.*",
-        "mscharl/laravel-static-image-cache": "^1.2",
-        "contentful/laravel": "^2.0"
+        "contentful/laravel": "^2.0",
+        "campaigningbureau/laravel-static-image-cache": "^2.0"
     },
     "authors": [
         {

@@ -22,7 +22,7 @@
         $url = %variableName%->getFile()
                            ->getUrl($options);
 
-        return staticImage($url);
+        return static_image($url);
     }
 
     /**
