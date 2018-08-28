@@ -1,6 +1,6 @@
-# Contentful Repository Generator for Laravel 5.5
+# Contentful Repository Generator for Laravel 5.6
 
-Laravel 5.5 Contentful Repository generator.
+Laravel 5.x Contentful Repository generator.
 
 Generates contract, contentful repository, model, factory and caching repository with fields that are defined in the Contentful model. (https://www.contentful.com/)
 
@@ -12,6 +12,11 @@ If one of these files does already exist, it can be kept or overwritten.
 
 ```
 composer require campaigningbureau/cf-repository-generator
+```
+
+If using Laravel < 5.6, use the ^2.0 Branch:
+```
+composer require "campaigningbureau/cf-repository-generator: ^2.0",
 ```
 
 ### Step 2: Register the Service Provider
