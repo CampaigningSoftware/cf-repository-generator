@@ -1,4 +1,4 @@
-# Contentful Repository Generator for Laravel 5.6
+# Contentful Repository Generator for Laravel 5.8
 
 Laravel 5.x Contentful Repository generator.
 
@@ -12,6 +12,11 @@ If one of these files does already exist, it can be kept or overwritten.
 
 ```
 composer require campaigningbureau/cf-repository-generator
+```
+
+If using Laravel >= 5.6 and < 5.8, use the ^3.0 Branch:
+```
+composer require "campaigningbureau/cf-repository-generator: ^3.0",
 ```
 
 If using Laravel < 5.6, use the ^2.0 Branch:
