@@ -5,12 +5,16 @@ namespace CampaigningBureau\CfRepositoryGenerator\Commands;
 use CampaigningBureau\CfRepositoryGenerator\Services\ContentfulService;
 use Illuminate\Console\Command;
 
+/**
+ * Class BaseCfRepositoryCommand
+ * @package CampaigningBureau\CfRepositoryGenerator\Commands
+ */
 class BaseCfRepositoryCommand extends Command
 {
     /**
      * File manager.
      *
-     * @var Illuminate\Filesystem\Filesystem
+     * @var \Illuminate\Filesystem\Filesystem
      */
     protected $fileManager;
 
@@ -37,6 +41,8 @@ class BaseCfRepositoryCommand extends Command
     /**
      * this method needs to be called at first the handle() method of the child class, as we dont want them in the
      * constructor
+     *
+     * @param ContentfulService $contentful
      */
     public function handle(ContentfulService $contentful)
     {

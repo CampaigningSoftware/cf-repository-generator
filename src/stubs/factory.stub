@@ -2,12 +2,12 @@
 
 namespace %namespaces.factories%;
 
-use Contentful\Delivery\DynamicEntry;
+use Contentful\Delivery\Resource\Entry;
 use %namespaces.models%\%modelName%;
 
 class %modelName%Factory
 {
-    public static function build(DynamicEntry $entry): %modelName%
+    public static function build(Entry $entry): %modelName%
     {
         return new %modelName%(%modelGetterList%);
     }

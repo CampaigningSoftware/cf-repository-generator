@@ -2,7 +2,7 @@
 
 namespace %namespaces.models%;
 
-use Contentful\File\ImageOptions;
+use Contentful\Core\File\ImageOptions;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;

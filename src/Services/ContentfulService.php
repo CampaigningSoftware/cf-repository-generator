@@ -4,13 +4,16 @@ namespace CampaigningBureau\CfRepositoryGenerator\Services;
 
 
 use CampaigningBureau\CfRepositoryGenerator\Models\ContentfulTypeFieldDecorator;
+use Contentful\Core\Resource\ResourceArray;
 use Contentful\Delivery\Client;
-use Contentful\Delivery\ContentType;
-use Contentful\Delivery\ContentTypeField;
-use Contentful\ResourceArray;
-use Illuminate\Filesystem\Cache;
+use Contentful\Delivery\Resource\ContentType;
+use Contentful\Delivery\Resource\ContentType\Field;
 use Illuminate\Support\Collection;
 
+/**
+ * Class ContentfulService
+ * @package CampaigningBureau\CfRepositoryGenerator\Services
+ */
 class ContentfulService
 {
     /**
@@ -82,15 +85,14 @@ class ContentfulService
 
         // build a collection of decorated fields
         $fields = collect($contentType->getFields())
-            ->map(function (ContentTypeField $contentTypeField)
+            ->map(function (Field $contentTypeField)
             {
                 return new ContentfulTypeFieldDecorator($contentTypeField);
             })
             ->flatten();
 
         // add the id as 'field' as we also want to add it to the collection
-        $fields->prepend(new ContentfulTypeFieldDecorator(new ContentTypeField('id', 'id', 'Symbol', null, null, null,
-            true, false, false)));
+        $fields->prepend(new ContentfulTypeFieldDecorator(new Field('id', 'id', 'Symbol')));
 
         return $fields;
     }

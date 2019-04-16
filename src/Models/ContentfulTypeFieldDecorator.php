@@ -3,7 +3,8 @@
 namespace CampaigningBureau\CfRepositoryGenerator\Models;
 
 
-use Contentful\Delivery\ContentTypeField;
+use Contentful\Delivery\Resource\ContentType\Field;
+use Illuminate\Support\Str;
 
 /**
  * Class ContentfulTypeFieldDecorator
@@ -15,23 +16,23 @@ use Contentful\Delivery\ContentTypeField;
 class ContentfulTypeFieldDecorator
 {
     /**
-     * @var ContentTypeField
+     * @var Field
      */
     protected $contentTypeField;
 
     /**
      * File manager.
      *
-     * @var Illuminate\Filesystem\Filesystem
+     * @var \Illuminate\Filesystem\Filesystem
      */
     private $fileManager;
 
     /**
      * ContentfulTypeFieldDecorator constructor.
      *
-     * @param ContentTypeField $contentfulTypeField
+     * @param Field $contentfulTypeField
      */
-    public function __construct(ContentTypeField $contentfulTypeField)
+    public function __construct(Field $contentfulTypeField)
     {
         $this->contentTypeField = $contentfulTypeField;
         $this->fileManager = app('files');
@@ -56,7 +57,7 @@ class ContentfulTypeFieldDecorator
      */
     public function getGetterName()
     {
-        return 'get' . studly_case($this->contentTypeField->getId()) . '()';
+        return 'get' . Str::studly($this->contentTypeField->getId()) . '()';
     }
 
     /**
@@ -68,7 +69,7 @@ class ContentfulTypeFieldDecorator
      */
     public function getCheckerName()
     {
-        return 'has' . studly_case($this->contentTypeField->getId()) . '()';
+        return 'has' . Str::studly($this->contentTypeField->getId()) . '()';
     }
 
     /**
@@ -78,7 +79,7 @@ class ContentfulTypeFieldDecorator
      */
     public function getUrlGetterName()
     {
-        return 'get' . studly_case($this->contentTypeField->getId()) . 'Url';
+        return 'get' . Str::studly($this->contentTypeField->getId()) . 'Url';
     }
 
     /**
@@ -162,7 +163,7 @@ class ContentfulTypeFieldDecorator
     {
         switch ($contentfulLinkType) {
             case 'Asset':
-                return '\Contentful\Delivery\Asset';
+                return '\Contentful\Delivery\Resource\Asset';
             case 'Entry':
                 // TODO not yet implemented
                 return '<tbd>';
@@ -175,7 +176,6 @@ class ContentfulTypeFieldDecorator
      * get the getter method(s) for the current field.
      * all fields return a getter.
      * image fields additionally return cached url and a boolean checker.
-     * @return string
      */
     public function getMethods()
     {
@@ -193,7 +193,7 @@ class ContentfulTypeFieldDecorator
         // with no linked type, just return the getter
         if ($this->contentTypeField->getLinkType() === null) {
             return $getterTemplate;
-        } else if ($this->contentTypeField->getLinkType() === 'Asset') {
+        } elseif ($this->contentTypeField->getLinkType() === 'Asset') {
             // load template
             $assetGetterTemplate = $this->fileManager->get(__DIR__ . '/../stubs/methods/asset-methods.stub');
 

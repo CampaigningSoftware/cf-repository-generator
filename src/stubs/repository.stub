@@ -2,7 +2,7 @@
 
 namespace %namespaces.repositories%;
 
-use Contentful\Delivery\DynamicEntry;
+use Contentful\Delivery\Resource\Entry;
 use Contentful\Delivery\Query;
 use Contentful\Laravel\Facades\ContentfulDelivery;
 use Illuminate\Support\Collection;
@@ -26,7 +26,7 @@ class Contentful%modelName%Repository implements %modelName%Repository
             $resourceArray = $this->loadPageFromApi($pageCount);
             $modelCount += count($resourceArray);
 
-            /** @var DynamicEntry $entry */
+            /** @var Entry $entry */
             foreach ($resourceArray as $entry) {
                 try {
                     $models->push($this->buildModelFromEntry($entry));
@@ -47,7 +47,7 @@ class Contentful%modelName%Repository implements %modelName%Repository
      *
      * @param int $pageCount
      *
-     * @return \Contentful\ResourceArray
+     * @return Contentful\Core\Resource\ResourceArray
      */
     private function loadPageFromApi($pageCount)
     {
@@ -63,11 +63,11 @@ class Contentful%modelName%Repository implements %modelName%Repository
     /**
      * build a model from the retrieved entry and return it
      *
-     * @param DynamicEntry $entry
+     * @param Entry $entry
      *
      * @return %modelName%
      */
-    private function buildModelFromEntry(DynamicEntry $entry): %modelName%
+    private function buildModelFromEntry(Entry $entry): %modelName%
     {
         return %modelName%Factory::build($entry);
     }

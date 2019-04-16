@@ -3,8 +3,9 @@
 namespace CampaigningBureau\CfRepositoryGenerator\Commands;
 
 use CampaigningBureau\CfRepositoryGenerator\Services\ContentfulService;
-use Contentful\Delivery\ContentType;
+use Contentful\Delivery\Resource\ContentType;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
 {
@@ -54,7 +55,7 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @param ContentfulService $contentful
      */
     public function handle(ContentfulService $contentful)
     {
@@ -159,6 +160,9 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
             $this->modelName, 'model');
     }
 
+    /**
+     * create the caching repository
+     */
     private function createCachingRepository()
     {
         $content = $this->fileManager->get($this->stubs['caching-repository']);
@@ -170,7 +174,7 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
             '%namespaces.models%'               => $this->calculateNamespaceFromPath($this->config('paths.models')),
             '%namespaces.contracts%'            => $this->calculateNamespaceFromPath($this->config('paths.contracts')),
             '%namespaces.caching-repositories%' => $this->calculateNamespaceFromPath($this->config('paths.caching-repositories')),
-            '%cacheKey%'                        => snake_case(str_plural($this->modelName)),
+            '%cacheKey%'                        => Str::snake(Str::plural($this->modelName)),
         ];
 
         $this->replacePlaceholdersAndPersistFile($replacements, $content, $this->config('paths.caching-repositories'),
@@ -179,8 +183,6 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
 
     /**
      * let the user select the content type from contentful
-     *
-     * @return string
      */
     private function selectContentType()
     {
@@ -210,10 +212,10 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
     private function selectModelName()
     {
         $this->modelName = $this->ask('Please specify a model name. This value will be used for naming the created classes.',
-            studly_case($this->contentTypeName));
+            Str::studly($this->contentTypeName));
 
         // convert the model name to studly case. removes blanks and ensures the first letter is uppercased
-        $this->modelName = studly_case($this->modelName);
+        $this->modelName = Str::studly($this->modelName);
     }
 
     /**
@@ -224,7 +226,7 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
     {
         $this->contentTypeName = $this->ask('No content types could be loaded from the configured contentful space. A stubbed version will be created. Please enter a name');
 
-        $this->contentTypeId = camel_case($this->contentTypeName);
+        $this->contentTypeId = Str::camel($this->contentTypeName);
     }
 
     /**
@@ -232,6 +234,9 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
      *
      * @param array  $replacements
      * @param string $content
+     * @param string $relativePath
+     * @param string $fileName
+     * @param string $type
      */
     private function replacePlaceholdersAndPersistFile($replacements, $content, $relativePath, $fileName, $type)
     {
