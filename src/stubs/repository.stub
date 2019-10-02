@@ -47,12 +47,12 @@ class Contentful%modelName%Repository implements %modelName%Repository
      *
      * @param int $pageCount
      *
-     * @return Contentful\Core\Resource\ResourceArray
+     * @return \Contentful\Core\Resource\ResourceArray
      */
     private function loadPageFromApi($pageCount)
     {
         $query = new Query();
-        $query->where('content_type', '%apiModelName%')
+        $query->setContentType('%apiModelName%')
               ->orderBy('-sys.createdAt')
               ->setLimit(config('contentful.page_size', 100))
               ->setSkip(config('contentful.page_size', 100) * $pageCount);
