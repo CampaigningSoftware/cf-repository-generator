@@ -71,14 +71,14 @@ class Contentful%modelName%Repository implements %modelName%Repository
               ->setLimit(1);
 
         try {
-            /** @var ResourceArray $entries */
+            /** @var \Contentful\Core\Resource\ResourceArray $entries */
             $entries = ContentfulDelivery::getEntries($query);
             $model = $this->buildModelFromEntry($entries->offsetGet(0));
 
             return $model;
-        } catch (Exception $ce) {
-            Log::error($ce->getMessage());
-            Log::error($ce->getTraceAsString());
+        } catch (\Exception $ce) {
+            \Log::error($ce->getMessage());
+            \Log::error($ce->getTraceAsString());
         }
 
         return null;
