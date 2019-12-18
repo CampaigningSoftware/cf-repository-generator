@@ -61,6 +61,30 @@ class Contentful%modelName%Repository implements %modelName%Repository
     }
 
     /**
+     * @return %modelName%
+     */
+    public function latest()
+    {
+        $query = new Query();
+        $query->setContentType('%apiModelName%')
+              ->orderBy('-sys.createdAt')
+              ->setLimit(1);
+
+        try {
+            /** @var ResourceArray $entries */
+            $entries = ContentfulDelivery::getEntries($query);
+            $model = $this->buildModelFromEntry($entries->offsetGet(0));
+
+            return $model;
+        } catch (Exception $ce) {
+            Log::error($ce->getMessage());
+            Log::error($ce->getTraceAsString());
+        }
+
+        return null;
+    }
+
+    /**
      * build a model from the retrieved entry and return it
      *
      * @param Entry $entry

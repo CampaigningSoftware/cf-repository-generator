@@ -100,6 +100,7 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
 
         $replacements = [
             '%namespaces.contracts%' => $this->calculateNamespaceFromPath($this->config('paths.contracts')),
+            '%namespaces.models%'    => $this->calculateNamespaceFromPath($this->config('paths.models')),
             '%modelName%'            => $this->modelName,
         ];
 

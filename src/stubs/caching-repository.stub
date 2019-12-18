@@ -5,6 +5,7 @@ namespace %namespaces.caching-repositories%;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Support\Collection;
 use %namespaces.contracts%\%modelName%Repository;
+use %namespaces.models%\%modelName%;
 
 class Caching%modelName%Repository implements %modelName%Repository
 {
@@ -38,6 +39,17 @@ class Caching%modelName%Repository implements %modelName%Repository
         return $this->cache->remember('%cacheKey%.all', 1440, function ()
         {
             return $this->repository->all();
+        });
+    }
+
+    /**
+     * @return %modelName%
+     */
+    public function latest()
+    {
+        return $this->cache->remember('%cacheKey%.latest', 1440, function ()
+        {
+            return $this->repository->latest();
         });
     }
 }

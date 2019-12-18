@@ -3,6 +3,7 @@
 namespace %namespaces.contracts%;
 
 use Illuminate\Support\Collection;
+use %namespaces.models%\%modelName%;
 
 interface %modelName%Repository
 {
@@ -10,4 +11,9 @@ interface %modelName%Repository
      * @return Collection
      */
     public function all();
+
+    /**
+     * @return %modelName%
+     */
+    public function latest();
 }
