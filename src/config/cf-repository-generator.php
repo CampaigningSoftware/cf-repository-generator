@@ -22,4 +22,9 @@ return [
      * an api key for accessing the delivery space
      */
     'contentful_delivery_token' => env('CONTENTFUL_DELIVERY_TOKEN', ''),
+
+    /*
+     * The ID of the environment you want to access.
+     */
+    'contentful_environment'    => env('CONTENTFUL_ENVIRONMENT_ID', 'master'),
 ];

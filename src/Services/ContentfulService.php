@@ -29,8 +29,11 @@ class ContentfulService
 
     public function __construct()
     {
-        $this->client = new Client(config('cf-repository-generator.contentful_delivery_token'),
-            config('cf-repository-generator.contentful_delivery_space'));
+        $this->client = new Client(
+            config('cf-repository-generator.contentful_delivery_token'),
+            config('cf-repository-generator.contentful_delivery_space'),
+            config('cf-repository-generator.contentful_environment', 'master')
+        );
     }
 
     /**

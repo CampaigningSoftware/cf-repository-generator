@@ -67,5 +67,6 @@ return [
 ];
 ```
 
-The `contentful_delivery_space` and `contentful_delivery_token` fields need to be set with the API Key and Space ID retrieved from Contentful.  
-By default they are set with the .env variables `CONTENTFUL_DELIVERY_SPACE` and `CONTENTFUL_DELIVERY_TOKEN`.
+- The `contentful_delivery_space` and `contentful_delivery_token` fields need to be set with the API Key and Space ID retrieved from Contentful.  
+- By default they are set with the .env variables `CONTENTFUL_DELIVERY_SPACE` and `CONTENTFUL_DELIVERY_TOKEN`.
+- `CONTENTFUL_ENVIRONMENT_ID` defines the Contentful environment to use (defaults to `master`)
