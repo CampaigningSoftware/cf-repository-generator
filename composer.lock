@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5c2c13902bb85d7ad2068557e3f52284",
+    "content-hash": "0b061facce5564ca4ec5bd26d7d3ff93",
     "packages": [
         {
             "name": "brick/math",
@@ -524,16 +524,16 @@
         },
         {
             "name": "contentful/laravel",
-            "version": "7.0.0",
+            "version": "6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/contentful/contentful-laravel.git",
-                "reference": "81a23d5244eb6405fd502be3f700c3aabe57aac6"
+                "reference": "1f4f00e9297152974c414e3f24d1f4e2f824e1a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/contentful/contentful-laravel/zipball/81a23d5244eb6405fd502be3f700c3aabe57aac6",
-                "reference": "81a23d5244eb6405fd502be3f700c3aabe57aac6",
+                "url": "https://api.github.com/repos/contentful/contentful-laravel/zipball/1f4f00e9297152974c414e3f24d1f4e2f824e1a1",
+                "reference": "1f4f00e9297152974c414e3f24d1f4e2f824e1a1",
                 "shasum": ""
             },
             "require": {
@@ -570,7 +570,7 @@
                 "MIT"
             ],
             "description": "Integrates the Contentful PHP SDK with Laravel.",
-            "time": "2020-05-14T09:27:30+00:00"
+            "time": "2020-03-24T08:11:34+00:00"
         },
         {
             "name": "contentful/rich-text",

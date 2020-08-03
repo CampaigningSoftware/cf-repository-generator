@@ -10,7 +10,7 @@
     "require": {
         "php": "^7.2",
         "illuminate/support": "^7.0",
-        "contentful/laravel": "^7.0",
+        "contentful/laravel": "^6.0",
         "campaigningbureau/laravel-static-image-cache": "^7.0"
     },
     "authors": [
