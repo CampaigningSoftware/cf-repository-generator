@@ -7,6 +7,10 @@ use Contentful\Delivery\Resource\ContentType;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
+/**
+ * Class MakeCfRepositoryCommand
+ * @package CampaigningBureau\CfRepositoryGenerator\Commands
+ */
 class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
 {
     /**
@@ -33,6 +37,7 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
         'factory'            => __DIR__ . '/../stubs/factory.stub',
         'model'              => __DIR__ . '/../stubs/model.stub',
         'caching-repository' => __DIR__ . '/../stubs/caching-repository.stub',
+        'fake-data'          => __DIR__ . '/../stubs/fake-data',
     ];
     /**
      * @var string
@@ -79,12 +84,21 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
 
         $this->createCachingRepository();
 
+        $this->createFakeData();
+
         $this->info('+++');
         $this->info('Creation completed. To use the repository, add the following lines to the register() method of your app service provider:');
         $this->info('+++');
         $this->line('$this->app->singleton(' . $this->modelName . 'Repository::class, function ()
 {
     return new Caching' . $this->modelName . 'Repository(new Contentful' . $this->modelName . 'Repository(), $this->app[\'cache.store\']);
+});');
+        $this->info('+++');
+        $this->info('If you prefer using fake data for development use the following lines instead:');
+        $this->info('+++');
+        $this->line('$this->app->singleton(' . $this->modelName . 'Repository::class, function ()
+{
+    return new Caching' . $this->modelName . 'Repository(new Fake' . $this->modelName . 'Repository(), $this->app[\'cache.store\']);
 });');
         $this->info('+++');
         $this->info('Now the repository is ready to be injected in your constructors.');
@@ -277,5 +291,31 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
         $this->line("The $type [{$fileName}] has been created.");
 
         $this->fileManager->put($filePath, $content);
+    }
+
+    private function createFakeData()
+    {
+
+        $replacements = [
+            '%modelName%'                       => $this->modelName,
+            '%namespaces.repositories%'         => $this->calculateNamespaceFromPath($this->config('paths.repositories')),
+            '%namespaces.factories%'            => $this->calculateNamespaceFromPath($this->config('paths.factories')),
+            '%namespaces.models%'               => $this->calculateNamespaceFromPath($this->config('paths.models')),
+            '%namespaces.contracts%'            => $this->calculateNamespaceFromPath($this->config('paths.contracts')),
+            '%namespaces.caching-repositories%' => $this->calculateNamespaceFromPath($this->config('paths.caching-repositories')),
+            '%namespaces.fake-data%'            => $this->calculateNamespaceFromPath($this->config('paths.fake-data')),
+            '%cacheKey%'                        => Str::snake(Str::plural($this->modelName)),
+            '%fakerArgumentList%'               => $this->contentful->getFakerArgumentList($this->contentfulFields),
+        ];
+
+        $this->replacePlaceholdersAndPersistFile($replacements,
+            $this->fileManager->get($this->stubs['fake-data'] . '/fake-asset.stub'), $this->config('paths.fake-data'),
+            'FakeAsset', 'Fake File');
+        $this->replacePlaceholdersAndPersistFile($replacements,
+            $this->fileManager->get($this->stubs['fake-data'] . '/fake-image-file.stub'),
+            $this->config('paths.fake-data'), 'FakeImageFile', 'Fake File');
+        $this->replacePlaceholdersAndPersistFile($replacements,
+            $this->fileManager->get($this->stubs['fake-data'] . '/fake-repository.stub'),
+            $this->config('paths.fake-data'), 'Fake' . $this->modelName . 'Repository', 'Fake File');
     }
 }

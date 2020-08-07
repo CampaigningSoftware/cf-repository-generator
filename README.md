@@ -53,6 +53,9 @@ $ php artisan vendor:publish --provider="CampaigningBureau\CfRepositoryGenerator
 
 This command will load all content types that are defined in the configured contentful space and provide an easy way to generate the relevant classes. 
 
+The generated files also contain fake repositories, that can be used instead of the actual contentful data (for instance, if no data is available during development). 
+The whole directory (`FakeData` by default) can be removed, if it isn't used.
+
 
 ## Configuration
 
@@ -64,11 +67,12 @@ These are the default paths, that will be used, if the config file isn't publish
 ```php
 return [
     'paths' => [
-        'contracts'    => 'Repositories/Contracts/',
-        'repositories' => 'Repositories/',
+        'contracts'            => 'Repositories/Contracts/',
+        'repositories'         => 'Repositories/',
         'caching-repositories' => 'Repositories/Caching/',
-        'models' => 'Models/',
-        'factories' => 'Factories/',
+        'models'               => 'Models/',
+        'factories'            => 'Factories/',
+        'fake-data'            => 'FakeData/',
     ],
 ];
 ```

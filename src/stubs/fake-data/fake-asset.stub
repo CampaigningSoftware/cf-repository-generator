@@ -1,0 +1,47 @@
+<?php
+
+namespace %namespaces.fake-data%;
+
+
+use Contentful\Delivery\Resource\Asset;
+use EmanueleMinotto\Faker\PlaceholdItProvider;
+use Faker\Factory;
+
+/**
+ * generates a fake asset
+ */
+class FakeAsset extends Asset
+{
+    /**
+     * @var \Faker\Generator
+     */
+    private $faker;
+
+    /**
+     * FakeAsset constructor.
+     *
+     * @param array $data
+     */
+    public function __construct(array $data)
+    {
+        parent::__construct($data);
+        $this->faker = Factory::create('de_AT');
+        $this->faker->addProvider(new PlaceholdItProvider($this->faker));
+    }
+
+    /**
+     * returns a fake image with random dimensions
+     *
+     * @param null $locale
+     *
+     * @return \Contentful\Core\File\FileInterface|FakeImageFile|null
+     */
+    public function getFile($locale = null)
+    {
+        $width = $this->faker->numberBetween(300, 600);
+        $height = $this->faker->numberBetween(300, 400);
+
+        return new FakeImageFile($this->faker->word, 'image/jpg', $this->faker->imageUrl($width . 'x' . $height),
+            $this->faker->randomDigitNotNull, $width, $height);
+    }
+}

@@ -1,0 +1,63 @@
+<?php
+
+namespace %namespaces.fake-data%;
+
+
+use Faker\Factory;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
+use %namespaces.models%\%modelName%;
+use %namespaces.repositories%\Contentful%modelName%Repository;
+
+class Fake%modelName%Repository extends Contentful%modelName%Repository
+{
+    /**
+     * @var \Faker\Generator
+     */
+    private $faker;
+
+    public function __construct()
+    {
+        $this->faker = Factory::create('de_AT');
+        $this->faker->addProvider(new \DavidBadura\FakerMarkdownGenerator\FakerProvider($this->faker));
+    }
+
+    /**
+     *
+     * @return Collection
+     */
+    public function all(): Collection
+    {
+        $models = new Collection();
+        for ($i = 0; $i < 7; $i++) {
+            $models->push(new %modelName%(
+                %fakerArgumentList%
+            ));
+        }
+
+        return $models;
+    }
+
+    /**
+     * generate an array of elements with a random postfix.
+     * most arrays will contain 1 element, some will contain 2 or 3.
+     *
+     * @param string $prefix
+     *
+     * @return array
+     */
+    private function generateArray($prefix)
+    {
+        $array = [];
+        $array[] = $prefix . ' ' . $this->faker->numberBetween(1, 100);
+
+        // some arrays receive more than 1 element
+        if ($this->faker->numberBetween(0, 100) > 70) {
+            for ($i = 0; $i < $this->faker->numberBetween(1, 2); $i++) {
+                $array[] = $prefix . ' ' . $this->faker->numberBetween(1, 30);
+            }
+        }
+
+        return $array;
+    }
+}

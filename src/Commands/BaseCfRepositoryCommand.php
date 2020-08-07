@@ -36,6 +36,7 @@ class BaseCfRepositoryCommand extends Command
         'caching-repositories' => 'Repositories/Caching/',
         'models'               => 'Models/',
         'factories'            => 'Factories/',
+        'fake-data'            => 'FakeData/',
     ];
 
     /**
@@ -55,7 +56,7 @@ class BaseCfRepositoryCommand extends Command
      * get a configuration value from the package config file.
      * if the config value is not found, the default path is used.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return string
      */

@@ -11,7 +11,11 @@
         "php": "^7.2",
         "illuminate/support": "^7.0",
         "contentful/laravel": "^6.0",
-        "campaigningbureau/laravel-static-image-cache": "^7.0"
+        "campaigningbureau/laravel-static-image-cache": "^7.0",
+        "fzaninotto/faker": "^1.9",
+        "emanueleminotto/faker-placehold-it-provider": "^1.0",
+        "davidbadura/faker-markdown-generator": "^1.0",
+        "nesbot/carbon": "^2.38"
     },
     "authors": [
         {

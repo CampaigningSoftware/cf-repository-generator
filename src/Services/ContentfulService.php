@@ -112,7 +112,12 @@ class ContentfulService
     {
         return $contentfulFields->map(function (ContentfulTypeFieldDecorator $type)
         {
-            return '$entry->' . $type->getGetterName();
+            switch ($type->getType(false)) {
+                case 'Carbon':
+                    return 'Carbon::createFromTimestamp($entry->' . $type->getGetterName() . '->getTimestamp())';
+                default:
+                    return '$entry->' . $type->getGetterName();
+            }
         })
                                 ->implode(', ');
     }
@@ -197,5 +202,33 @@ class ContentfulService
         {
             return $carry . PHP_EOL . $contentfulField->getMethods();
         });
+    }
+
+    /**
+     * get the argument list for the faker. depending on the type another fake is used
+     *
+     * @param Collection $contentfulFields
+     *
+     * @return mixed
+     */
+    public function getFakerArgumentList($contentfulFields)
+    {
+        return $contentfulFields->map(function (ContentfulTypeFieldDecorator $type)
+        {
+            switch ($type->getType(false)) {
+                case 'string':
+                    return '$this->faker->words(3, true)';
+                case 'int':
+                    return '$this->faker->numberBetween(0,100)';
+                case 'double':
+                    return '$this->faker->randomFloat(2)';
+                case 'bool':
+                    return '$this->faker->boolean';
+                case 'Carbon':
+                    return 'Carbon::now()->addDays($this->faker->numberBetween(-10, 30))';
+                default:
+                    return '<tbd>';
+            }
+        })->implode(', ');
     }
 }

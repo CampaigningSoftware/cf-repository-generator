@@ -143,6 +143,7 @@ class ContentfulTypeFieldDecorator
             case 'Link':
                 return $this->getLinkDataType($contentfulLinkType);
             case 'Date':
+                return 'Carbon';
             case 'Array':
             case 'Object':
                 // TODO not yet implemented

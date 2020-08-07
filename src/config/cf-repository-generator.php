@@ -12,6 +12,7 @@ return [
         'caching-repositories' => 'Repositories/Caching/',
         'models'               => 'Models/',
         'factories'            => 'Factories/',
+        'fake-data'            => 'FakeData/',
     ],
 
     /**

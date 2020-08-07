@@ -1,0 +1,35 @@
+<?php
+
+namespace %namespaces.fake-data%;
+
+use Contentful\Core\File\ImageFile;
+use Contentful\Core\File\UrlOptionsInterface;
+
+class FakeImageFile extends ImageFile
+{
+    /**
+     * overwrite the getUrl function, so the image is loaded in the correct dimensions, if width and/or height are
+     * specified
+     *
+     * @param UrlOptionsInterface|null $options
+     *
+     * @return string
+     */
+    public function getUrl(UrlOptionsInterface $options = null): string
+    {
+        $parentUrl = parent::getUrl($options);
+
+        // get specified width and height by regexp
+        preg_match('/.*w=([\d]+)&h=(\d]+).*/', $parentUrl, $matches);
+
+        if (\count($matches) > 1) {
+            $parentUrl = str_replace($this->getWidth() . 'x', $matches[1] . 'x', $parentUrl);
+        }
+
+        if (\count($matches) > 2) {
+            $parentUrl = str_replace('x' . $this->getHeight(), 'x' . $matches[2], $parentUrl);
+        }
+
+        return $parentUrl;
+    }
+}

@@ -2,6 +2,7 @@
 
 namespace %namespaces.factories%;
 
+use Carbon\Carbon;
 use Contentful\Delivery\Resource\Entry;
 use %namespaces.models%\%modelName%;
 
