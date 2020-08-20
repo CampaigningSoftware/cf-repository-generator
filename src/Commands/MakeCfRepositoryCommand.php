@@ -252,13 +252,20 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
      * @param string $relativePath
      * @param string $fileName
      * @param string $type
+     * @param string $extension
      */
-    private function replacePlaceholdersAndPersistFile($replacements, $content, $relativePath, $fileName, $type)
-    {
+    private function replacePlaceholdersAndPersistFile(
+        $replacements,
+        $content,
+        $relativePath,
+        $fileName,
+        $type,
+        $extension = 'php'
+    ) {
         $content = str_replace(array_keys($replacements), array_values($replacements), $content);
 
         $fileDirectory = app()->basePath() . '/app/' . $relativePath;
-        $filePath = $fileDirectory . $fileName . '.php';
+        $filePath = $fileDirectory . $fileName . '.' . $extension;
 
         $this->putFileToHdd($fileDirectory, $filePath, $fileName, $content, $type);
     }
@@ -293,19 +300,17 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
         $this->fileManager->put($filePath, $content);
     }
 
+    /**
+     * create fake data
+     */
     private function createFakeData()
     {
-
         $replacements = [
-            '%modelName%'                       => $this->modelName,
-            '%namespaces.repositories%'         => $this->calculateNamespaceFromPath($this->config('paths.repositories')),
-            '%namespaces.factories%'            => $this->calculateNamespaceFromPath($this->config('paths.factories')),
-            '%namespaces.models%'               => $this->calculateNamespaceFromPath($this->config('paths.models')),
-            '%namespaces.contracts%'            => $this->calculateNamespaceFromPath($this->config('paths.contracts')),
-            '%namespaces.caching-repositories%' => $this->calculateNamespaceFromPath($this->config('paths.caching-repositories')),
-            '%namespaces.fake-data%'            => $this->calculateNamespaceFromPath($this->config('paths.fake-data')),
-            '%cacheKey%'                        => Str::snake(Str::plural($this->modelName)),
-            '%fakerArgumentList%'               => $this->contentful->getFakerArgumentList($this->contentfulFields),
+            '%modelName%'               => $this->modelName,
+            '%namespaces.repositories%' => $this->calculateNamespaceFromPath($this->config('paths.repositories')),
+            '%namespaces.models%'       => $this->calculateNamespaceFromPath($this->config('paths.models')),
+            '%namespaces.fake-data%'    => $this->calculateNamespaceFromPath($this->config('paths.fake-data')),
+            '%fakerArgumentList%'       => $this->contentful->getFakerArgumentList($this->contentfulFields),
         ];
 
         $this->replacePlaceholdersAndPersistFile($replacements,
@@ -317,5 +322,9 @@ class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
         $this->replacePlaceholdersAndPersistFile($replacements,
             $this->fileManager->get($this->stubs['fake-data'] . '/fake-repository.stub'),
             $this->config('paths.fake-data'), 'Fake' . $this->modelName . 'Repository', 'Fake File');
+
+        $this->replacePlaceholdersAndPersistFile($replacements,
+            $this->fileManager->get($this->stubs['fake-data'] . '/info.md'),
+            $this->config('paths.fake-data'), 'info', 'Info File', 'md');
     }
 }

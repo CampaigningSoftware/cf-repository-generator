@@ -226,6 +226,8 @@ class ContentfulService
                     return '$this->faker->boolean';
                 case 'Carbon':
                     return 'Carbon::now()->addDays($this->faker->numberBetween(-10, 30))';
+                case '\Contentful\Delivery\Resource\Asset':
+                    return 'new FakeAsset([])';
                 default:
                     return '<tbd>';
             }
