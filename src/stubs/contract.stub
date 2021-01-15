@@ -16,4 +16,34 @@ interface %modelName%Repository
      * @return %modelName%
      */
     public function latest();
+
+    /**
+     * load an item by id
+     *
+     * @param Collection $allEntries
+     * @param string     $id
+     *
+     * @return %modelName%|null
+     */
+    public function byId(Collection $allEntries, $id): ?%modelName%;
+
+    /**
+     * load an item by slug
+     *
+     * @param Collection $allEntries
+     * @param string     $slug
+     *
+     * @return %modelName%|null
+     */
+    public function bySlug(Collection $allEntries, $slug): ?%modelName%;
+
+    /**
+     * load items filtered by string
+     *
+     * @param Collection  $allEntries
+     * @param null|string $q
+     *
+     * @return Collection
+     */
+    public function filtered(Collection $allEntries, $q = null): Collection;
 }

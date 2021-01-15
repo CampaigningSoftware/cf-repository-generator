@@ -95,4 +95,58 @@ class Contentful%modelName%Repository implements %modelName%Repository
     {
         return %modelName%Factory::build($entry);
     }
+
+    /**
+     * load an item by id
+     *
+     * @param Collection $allEntries
+     * @param string     $id
+     *
+     * @return %modelName% |null
+     */
+    public function byId(Collection $allEntries, $id): ?%modelName%
+    {
+        return $allEntries->filter(static function (%modelName% $item) use ($id)
+        {
+            return $item->getId() === $id;
+        })->first();
+    }
+    
+    /**
+     * load an item by slug
+     *
+     * @param Collection $allEntries
+     * @param string     $slug
+     *
+     * @return %modelName%|null
+     */
+    public function bySlug(Collection $allEntries, $slug): ?%modelName%
+    {
+        // todo this method only works if the getSlug() method exists on the model. safely remove it, if no slugs exist
+        return $allEntries->filter(static function (%modelName% $item) use ($slug)
+        {
+            return $item->getSlug() === $slug;
+        })->first();
+    }
+
+    /**
+     * get items filtered by string
+     *
+     * @param Collection  $allEntries
+     * @param null|string $q
+     *
+     * @return Collection
+     */
+    public function filtered(Collection $allEntries, $q = null): Collection
+    {
+        if ($q === null) {
+            return $allEntries;
+        }
+
+        // todo add filter parameters
+        return $allEntries->filter(static function (%modelName% $item) use ($q)
+        {
+            return (Str::contains(strtolower($item->getId()), strtolower($q)));
+        })->values();
+    }
 }

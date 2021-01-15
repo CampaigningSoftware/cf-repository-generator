@@ -52,4 +52,50 @@ class Caching%modelName%Repository implements %modelName%Repository
             return $this->repository->latest();
         });
     }
+
+    /**
+     * load an item by id
+     *
+     * @param Collection $allEntries
+     * @param string     $id
+     *
+     * @return %modelName% |null
+     */
+    public function byId(Collection $allEntries, $id): ?%modelName%
+    {
+        return $this->cache->remember('%cacheKey%.id.' . $id, 1440, function () use ($allEntries, $id)
+        {
+            return $this->repository->byId($allEntries, $id);
+        });
+    }
+
+    /**
+     * load an item by slug
+     *
+     * @param Collection $allEntries
+     * @param string     $slug
+     *
+     * @return %modelName%|null
+     */
+    public function bySlug(Collection $allEntries, $slug): ?%modelName%
+    {
+        return $this->cache->remember('%cacheKey%.slug.' . $slug, 1440, function () use ($allEntries, $slug)
+        {
+            return $this->repository->bySlug($allEntries, $slug);
+        });
+    }
+
+    /**
+     * @param Collection $allEntries
+     * @param null       $q
+     *
+     * @return Collection
+     */
+    public function filtered(Collection $allEntries, $q = null): Collection
+    {
+        return $this->cache->remember('%cacheKey%.filtered.' . strtolower($q), 1440, function () use ($allEntries, $q)
+        {
+            return $this->repository->filtered($allEntries, $q);
+        });
+    }
 }
