@@ -14,21 +14,15 @@ If one of these files does already exist, it can be kept or overwritten.
 composer require campaigningbureau/cf-repository-generator
 ```
 
-If using Laravel 5.8, use the ^4.0 Branch:
-```
-composer require "campaigningbureau/cf-repository-generator: ^4.0",
-```
+#### Supported versions
 
-
-If using Laravel >= 5.6 and < 5.8, use the ^3.0 Branch:
-```
-composer require "campaigningbureau/cf-repository-generator: ^3.0",
-```
-
-If using Laravel < 5.6, use the ^2.0 Branch:
-```
-composer require "campaigningbureau/cf-repository-generator: ^2.0",
-```
+| Package version | Required Laravel version | Minimum PHP version |
+|-----------------|--------------------------|---------------------|
+| v8.*            | 8                        | 7.3.0               |
+| v7.*            | 7                        | 7.2.5               |
+| v4.*            | 5.8                      | 7.1.3               |
+| v3.*            | >= 5.6 < 5.8             | 7.1.3               |
+| v2.*            | < 5.6                    | 7.0                |
 
 ### Step 2: Register the Service Provider
 
