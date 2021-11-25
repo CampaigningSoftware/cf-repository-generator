@@ -4,7 +4,6 @@ namespace %namespaces.fake-data%;
 
 
 use Contentful\Delivery\Resource\Asset;
-use EmanueleMinotto\Faker\PlaceholdItProvider;
 use Faker\Factory;
 
 /**
@@ -26,7 +25,6 @@ class FakeAsset extends Asset
     {
         parent::__construct($data);
         $this->faker = Factory::create('de_AT');
-        $this->faker->addProvider(new PlaceholdItProvider($this->faker));
     }
 
     /**
@@ -41,7 +39,7 @@ class FakeAsset extends Asset
         $width = $this->faker->numberBetween(300, 600);
         $height = $this->faker->numberBetween(300, 400);
 
-        return new FakeImageFile($this->faker->word, 'image/jpg', $this->faker->imageUrl($width . 'x' . $height),
+        return new FakeImageFile($this->faker->word, 'image/jpg', $this->faker->imageUrl($width, $height),
             $this->faker->randomDigitNotNull, $width, $height);
     }
 }
