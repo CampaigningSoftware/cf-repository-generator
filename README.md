@@ -1,4 +1,4 @@
-# Contentful Repository Generator for Laravel 7
+# Contentful Repository Generator for Laravel 7 (8 and 9)
 
 Laravel 7 Contentful Repository generator.
 
@@ -18,12 +18,13 @@ composer require campaigningbureau/cf-repository-generator
 
 | Package version | Required Laravel version | Minimum PHP version |
 |-----------------|--------------------------|---------------------|
+| ^8.2            | 9.x                      | ^8.0.2              |
 | v8.*            | 8                        | 7.3.0               |
 | v7.*            | 7                        | 7.2.5               |
 | v6.*            | 6                        | 7.1.3               |
 | v4.*            | 5.8                      | 7.1.3               |
 | v3.*            | >= 5.6 < 5.8             | 7.1.3               |
-| v2.*            | < 5.6                    | 7.0                |
+| v2.*            | < 5.6                    | 7.0                 |
 
 ### Step 2: Register the Service Provider
 
