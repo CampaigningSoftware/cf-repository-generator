@@ -11,8 +11,8 @@
         "php": "^7.3||^8.0",
         "illuminate/support": "^8.0||^9.0",
         "contentful/laravel": "^8.0",
-        "campaigningbureau/laravel-static-image-cache": "^8.0",
-        "fakerphp/faker": "^1.16",
+        "campaigningbureau/laravel-static-image-cache": "^8.2",
+        "fakerphp/faker": "^1.19",
         "davidbadura/faker-markdown-generator": "^1.0",
         "nesbot/carbon": "^2.38"
     },
