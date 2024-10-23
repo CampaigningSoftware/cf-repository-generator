@@ -8,10 +8,10 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.3||^8.0",
-        "illuminate/support": "^8.0||^9.0||^10.0",
+        "php": "^8.1",
+        "illuminate/support": "^9.0||^10.0||^11.0",
         "contentful/laravel": "^9.0",
-        "campaigningbureau/laravel-static-image-cache": "^10.0",
+        "campaigningbureau/laravel-static-image-cache": "^10.0||@dev",
         "fakerphp/faker": "^1.23",
         "davidbadura/faker-markdown-generator": "^1.1",
         "nesbot/carbon": "^2.72"

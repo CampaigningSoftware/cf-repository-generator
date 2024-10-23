@@ -18,6 +18,7 @@ composer require campaigningbureau/cf-repository-generator
 
 | Package version | Required Laravel version | Minimum PHP version |
 |-----------------|--------------------------|---------------------|
+| ^10.1           | 10.x or 11.x             | ^8.1                |
 | ^8.2            | 9.x                      | ^8.0.2              |
 | v8.*            | 8                        | 7.3.0               |
 | v7.*            | 7                        | 7.2.5               |
