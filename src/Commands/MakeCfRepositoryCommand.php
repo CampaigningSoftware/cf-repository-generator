@@ -1,15 +1,15 @@
 <?php
 
-namespace CampaigningBureau\CfRepositoryGenerator\Commands;
+namespace CampaigningSoftware\CfRepositoryGenerator\Commands;
 
-use CampaigningBureau\CfRepositoryGenerator\Services\ContentfulService;
+use CampaigningSoftware\CfRepositoryGenerator\Services\ContentfulService;
 use Contentful\Delivery\Resource\ContentType;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
  * Class MakeCfRepositoryCommand
- * @package CampaigningBureau\CfRepositoryGenerator\Commands
+ * @package CampaigningSoftware\CfRepositoryGenerator\Commands
  */
 class MakeCfRepositoryCommand extends BaseCfRepositoryCommand
 {

@@ -1,9 +1,8 @@
 <?php
 
-namespace CampaigningBureau\CfRepositoryGenerator;
+namespace CampaigningSoftware\CfRepositoryGenerator;
 
-use CampaigningBureau\CfRepositoryGenerator\Commands\MakeCfRepositoryCommand;
-use CampaigningBureau\LaravelStaticImageCache\Provider\LaravelStaticImageCacheProvider;
+use CampaigningSoftware\CfRepositoryGenerator\Commands\MakeCfRepositoryCommand;
 use Contentful\Laravel\ContentfulServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,7 +21,6 @@ class CfRepositoryGeneratorServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->app->register(ContentfulServiceProvider::class);
-        $this->app->register(LaravelStaticImageCacheProvider::class);
 
         if ($this->app->runningInConsole()) {
             $this->commands([

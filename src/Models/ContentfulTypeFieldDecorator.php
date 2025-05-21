@@ -1,6 +1,6 @@
 <?php
 
-namespace CampaigningBureau\CfRepositoryGenerator\Models;
+namespace CampaigningSoftware\CfRepositoryGenerator\Models;
 
 
 use Contentful\Delivery\Resource\ContentType\Field;
@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
  *
  * decorate a contentful type field with additional functionality
  *
- * @package CampaigningBureau\CfRepositoryGenerator\Models
+ * @package CampaigningSoftware\CfRepositoryGenerator\Models
  */
 class ContentfulTypeFieldDecorator
 {

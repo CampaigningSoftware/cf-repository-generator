@@ -1,13 +1,13 @@
 <?php
 
-namespace CampaigningBureau\CfRepositoryGenerator\Commands;
+namespace CampaigningSoftware\CfRepositoryGenerator\Commands;
 
-use CampaigningBureau\CfRepositoryGenerator\Services\ContentfulService;
+use CampaigningSoftware\CfRepositoryGenerator\Services\ContentfulService;
 use Illuminate\Console\Command;
 
 /**
  * Class BaseCfRepositoryCommand
- * @package CampaigningBureau\CfRepositoryGenerator\Commands
+ * @package CampaigningSoftware\CfRepositoryGenerator\Commands
  */
 class BaseCfRepositoryCommand extends Command
 {

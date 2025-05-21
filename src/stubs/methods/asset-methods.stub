@@ -22,7 +22,8 @@
         $url = %variableName%->getFile()
                            ->getUrl($options);
 
-        return static_image($url);
+        // @TODO: you might want to proxy the image through your own server
+        return $url;
     }
 
     /**

@@ -1,6 +1,6 @@
-# Contentful Repository Generator for Laravel 7 (8 and 9)
+# Contentful Repository Generator for Laravel 11
 
-Laravel 7 Contentful Repository generator.
+Laravel 11 Contentful Repository generator.
 
 Generates contract, contentful repository, model, factory and caching repository with fields that are defined in the Contentful model. (https://www.contentful.com/)
 
@@ -11,40 +11,22 @@ If one of these files does already exist, it can be kept or overwritten.
 ### Step 1: Install Through Composer
 
 ```
-composer require campaigningbureau/cf-repository-generator
+composer require campaigningsoftware/cf-repository-generator
 ```
 
 #### Supported versions
 
 | Package version | Required Laravel version | Minimum PHP version |
 |-----------------|--------------------------|---------------------|
-| ^10.1           | 10.x or 11.x             | ^8.1                |
-| ^8.2            | 9.x                      | ^8.0.2              |
-| v8.*            | 8                        | 7.3.0               |
-| v7.*            | 7                        | 7.2.5               |
-| v6.*            | 6                        | 7.1.3               |
-| v4.*            | 5.8                      | 7.1.3               |
-| v3.*            | >= 5.6 < 5.8             | 7.1.3               |
-| v2.*            | < 5.6                    | 7.0                 |
+| ^11.0           | 11.x                     | ^8.1                |
 
-### Step 2: Register the Service Provider
-
-Add the service provider to `config/app.php`.
-
-```php
-	/*
-	 * Package Service Providers...
-	 */
-	CampaigningBureau\CfRepositoryGenerator\CfRepositoryGeneratorServiceProvider::class,
-```
-
-### Step 3: Publish and edit the config file
+### Step 2: Publish and edit the config file
 
 ```bash
-$ php artisan vendor:publish --provider="CampaigningBureau\CfRepositoryGenerator\CfRepositoryGeneratorServiceProvider"
+$ php artisan vendor:publish --provider="CampaigningSoftware\CfRepositoryGenerator\CfRepositoryGeneratorServiceProvider"
 ```
 
-### Step 4: Create repositories
+### Step 3: Create repositories
 
 `php artisan make:cf-repository`
 

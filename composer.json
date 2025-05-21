@@ -1,30 +1,36 @@
 {
-    "name": "campaigningbureau/cf-repository-generator",
+    "name": "campaigningsoftware/cf-repository-generator",
     "description": "Generates required repositories, factories and models to access a new Contentful Content Type in Laravel",
-    "keywords": [
-        "laravel",
-        "repository",
-        "contentful"
-    ],
     "license": "MIT",
     "require": {
-        "php": "^8.1",
-        "illuminate/support": "^9.0||^10.0||^11.0",
+        "php": "^8.3",
         "contentful/laravel": "^9.0",
-        "campaigningbureau/laravel-static-image-cache": "^10.0||@dev",
         "fakerphp/faker": "^1.23",
         "davidbadura/faker-markdown-generator": "^1.1",
-        "nesbot/carbon": "^2.72"
+        "nesbot/carbon": "^3.8",
+        "laravel/framework": "^11.0"
     },
     "authors": [
         {
             "name": "Stefan Schindler",
-            "email": "stefan.schindler@campaigning-bureau.com"
+            "email": "stefan.schindler@cambuildr.com"
         }
     ],
     "autoload": {
         "psr-4": {
-            "CampaigningBureau\\CfRepositoryGenerator\\": "src"
+            "CampaigningSoftware\\CfRepositoryGenerator\\": "src"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "8.3"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "CampaigningSoftware\\CfRepositoryGenerator\\CfRepositoryGeneratorServiceProvider"
+            ]
         }
     }
 }

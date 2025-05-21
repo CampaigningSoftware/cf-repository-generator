@@ -1,9 +1,9 @@
 <?php
 
-namespace CampaigningBureau\CfRepositoryGenerator\Services;
+namespace CampaigningSoftware\CfRepositoryGenerator\Services;
 
 
-use CampaigningBureau\CfRepositoryGenerator\Models\ContentfulTypeFieldDecorator;
+use CampaigningSoftware\CfRepositoryGenerator\Models\ContentfulTypeFieldDecorator;
 use Contentful\Core\Resource\ResourceArray;
 use Contentful\Delivery\Client;
 use Contentful\Delivery\Resource\ContentType;
@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 
 /**
  * Class ContentfulService
- * @package CampaigningBureau\CfRepositoryGenerator\Services
+ * @package CampaigningSoftware\CfRepositoryGenerator\Services
  */
 class ContentfulService
 {
