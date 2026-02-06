@@ -8,7 +8,7 @@
         "fakerphp/faker": "^1.23",
         "davidbadura/faker-markdown-generator": "^1.1",
         "nesbot/carbon": "^3.8",
-        "laravel/framework": "^11.0"
+        "laravel/framework": "^11.0|^12.0"
     },
     "authors": [
         {
